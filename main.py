@@ -1,4 +1,4 @@
-from Mir import LanguageServer, LoaderInStatusBar, deno, PackageStorage, run_command
+from Mir import LanguageServer, LoaderInStatusBar, deno, PackageStorage, command
 
 
 server_storage = PackageStorage(__package__, tag='0.0.1', sync_folder="./language-server")
@@ -18,7 +18,7 @@ class TailwindcssLanguageServer(LanguageServer):
         server_path = server_storage / "language-server" / "node_modules" / "@tailwindcss" / "language-server" / "bin" / "tailwindcss-language-server"
         if not server_path.exists():
             with LoaderInStatusBar(f'installing {self.name}'):
-                await run_command([deno.path, "install"], cwd=str(server_storage / "language-server"))
+                await command([deno.path, "install"], cwd=str(server_storage / "language-server"))
 
         await self.connect('stdio', {
             'cmd': [deno.path, 'run', '-A', server_path, '--stdio'],
